@@ -1,0 +1,23 @@
+version: '3'
+services:
+  localdb:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: technical-challenge
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_ROOT_PASSWORD: postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data/
+    ports:
+      # other services can access within the network at localdb:5432
+      - 5432:5432
+    expose:
+      # opens localhost:5432 for access outside the network
+      - 5432
+    networks:
+      - technical-challenge-network
+networks:
+  technical-challenge-network:
+    driver: bridge

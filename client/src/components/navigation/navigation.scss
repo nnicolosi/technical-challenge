@@ -1,0 +1,35 @@
+.navbar {
+  border-radius: 0;
+  padding-left: 24px;
+  padding-right: 24px;
+
+  .navbar-brand {
+    .navbar-brand-name {
+      font-size: 24px;
+      font-weight: 600;
+      padding: 2px 12px 2px 12px;
+    }
+  }
+
+  .navbar-menu {
+    background-color: transparent !important;
+
+    .navbar-item {
+      background-color: transparent !important;
+      color: rgba(0, 0, 0, 0.7) !important;
+
+      &:hover {
+        background-color: transparent !important;
+      }
+
+      &.active {
+        background-color: transparent !important;
+        cursor: default;
+      }
+    }
+
+    .navbar-end {
+      margin-right: 8px;
+    }
+  }
+}

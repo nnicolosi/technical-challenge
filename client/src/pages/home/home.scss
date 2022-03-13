@@ -1,0 +1,15 @@
+.home-page {
+  .hero {
+    .hero-body {
+      text-align: center;
+    }
+  }
+
+  .tile.is-parent {
+    margin: 0 12px 0 12px !important;
+  }
+
+  .tile.is-child {
+    margin: 24px 12px 12px 12px !important;
+  }
+}

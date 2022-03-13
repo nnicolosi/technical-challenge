@@ -1,0 +1,25 @@
+.footer {
+  background-color: #f5f5f5;
+  bottom: 0;
+  height: 44px;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+
+  .framework-logo {
+    display: inline-block;
+    margin: 8px 12px 8px 12px;
+
+    img {
+      height: 28px;
+    }
+  }
+
+  .framework-logo.scale-down {
+    margin-left: 4px;
+
+    img {
+      padding: 4px 0 4px 0;
+    }
+  }
+}
