@@ -26,5 +26,12 @@ We'll look forward to reviewing your submission.
 
 
 # Candidate Section
+This repository is a program for saving contacts and creating a call list.
 
-Your content here...
+To save a contact click create contact and put in all necessary information.
+
+To view your call list click the call list tab at the top of the screen and it will open a list of people to call.
+
+- Installing dependencies, launching, and initializing a containerized (Docker) Postgres database using the `docker-compose up` command after navigating to the root of the repository.
+- Installing dependencies and launching a backend API (Nest, Node, TypeScript) using the `npm install` and `npm start` commands after navigating to the `/server` directory.
+- Installing dependencies and launching a frontend UI (React, JavaScript) using the `npm install` and `npm start` commands after navigating to the `/client` directory.
