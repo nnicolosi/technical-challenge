@@ -21,12 +21,14 @@ export class ContactMapper {
   }
 
   mapCreateContactDtoToEntity(dto: ContactCreateDto): Contact {
-    return {
+    let test = {
       id: 0,
       firstName: dto.firstName,
       lastName: dto.lastName,
       emailAddress: dto.emailAddress,
       phoneNumbers: dto.phoneNumbers?.map(phoneNumber => this.phoneMapper.mapCreatePhoneDtoToEntity(phoneNumber))
     };
+    console.log(test)
+    return test
   }
 }

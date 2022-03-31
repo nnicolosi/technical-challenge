@@ -11,7 +11,10 @@ export class ContactService {
   ) { }
 
   async findAll(): Promise<Contact[]> {
-    return this.contactRepository.find();
+    let test = await this.contactRepository.find({
+      relations: ['phoneNumbers']
+    });
+    return test
   }
 
   async findById(id: number): Promise<Contact | undefined> {
@@ -20,13 +23,19 @@ export class ContactService {
 
   async create(contact: Contact): Promise<Contact> {
     const result = await this.contactRepository.insert(contact);
-    return this.contactRepository.findOne({
+    const test = await this.contactRepository.findOne({
       where: { id: result?.identifiers[0].id },
     });
+    return test
   }
 
   async update(contact: Contact): Promise<Contact> {
     const result = await this.contactRepository.save(contact);
     return this.contactRepository.findOne({ where: { id: contact.id } });
+  }
+
+  async delete(id: number): Promise<boolean> {
+    const result = await this.contactRepository.delete(id);
+    return true
   }
 }

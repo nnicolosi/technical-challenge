@@ -14,10 +14,12 @@ export class PhoneMapper {
   }
 
   mapCreatePhoneDtoToEntity(dto: PhoneCreateDto): Phone {
-    return {
+    let test = {
       id: 0,
       phoneNumber: dto.phoneNumber,
       phoneType: dto.phoneType,
     };
+    console.log(test)
+    return test
   }
 }

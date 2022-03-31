@@ -14,6 +14,12 @@ const Navigation = () => {
       </NavLink>
     );
 
+    items.push(
+      <NavLink key="contacts" className="navbar-item" to='/callList' activeClassName="active">
+        Call List
+      </NavLink>
+    )
+
     return items;
   };
 
