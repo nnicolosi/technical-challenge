@@ -25,6 +25,11 @@ export class ContactService {
     });
   }
 
+  async delete(id: number): Promise<boolean> {
+    const result = await this.contactRepository.delete(id);
+    return true
+  }
+
   async update(contact: Contact): Promise<Contact> {
     const result = await this.contactRepository.save(contact);
     return this.contactRepository.findOne({ where: { id: contact.id } });

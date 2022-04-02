@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import ModalContext from '../../contexts/modal-context';
-import { createContact } from '../../services/contact.service';
+import { createContact, deleteContact, editContact } from '../../services/contact.service';
 import './contact-modal.scss';
 
 const ContactModal = () => {
