@@ -3,12 +3,7 @@ import { getAllContacts } from '../../services/contact.service';
 import './callList.scss';
 
 const CallListPage = () => {
-  const [tableHeaders, setTableHeaders] = useState([]);
   const [tableRows, setTableRows] = useState([]);
-
-  const formatHeader = (header) => {
-    return header.replace(/([a-zA-Z])(?=[A-Z])/g, '$1 ').toUpperCase();
-  };
 
   const formatCell = (cell) => {
     if (typeof cell === 'boolean') {
@@ -21,22 +16,19 @@ const CallListPage = () => {
   useEffect(() => {
     getAllContacts().then((response) => {
       if (response.data && response.data.length) {
-        const headers = (
-          <tr>
-            {Object.getOwnPropertyNames(response.data[0]).map((header, index) => (
-              <th key={index}>{formatHeader(header)}</th>
-            ))}
-          </tr>
-        );
-        setTableHeaders(headers);
+        console.log(response.data)
 
         const rows = response.data.map((row, rowIndex) => (
           <tr key={rowIndex}>
             {Object.values(row).map((cell, cellIndex) => (
-              <td key={cellIndex}>{formatCell(cell)}</td>
+              cellIndex === 2 ? <td>{formatCell(cell)}</td> :
+              cellIndex === 1 ? <td>{formatCell(cell)}</td> :
+              // This SHOULD be an array of phone numbers
+              cellIndex === 4 ? <td>{formatCell(cell)}</td> :
+              null
             ))}
           </tr>
-        ));
+        ))
         setTableRows(rows);
       }
     });
@@ -51,7 +43,13 @@ const CallListPage = () => {
           </div>
           <hr />
           <table className="table is-fullwidth is-hoverable">
-            <thead>{tableHeaders}</thead>
+            <thead>
+              <tr>
+                <th>LAST NAME</th>
+                <th>FIRST NAME</th>
+                <th>HOME PHONE</th>
+              </tr>
+            </thead>
             <tbody>{tableRows}</tbody>
           </table>
         </div>

@@ -32,6 +32,9 @@
     "rxjs": "^6.6.6",
     "typeorm": "^0.2.32"
   },
+  "resolutions": { 
+    "react-error-overlay": "6.0.9"
+  },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",
     "@nestjs/schematics": "^7.3.0",

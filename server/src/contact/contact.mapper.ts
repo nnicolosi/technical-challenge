@@ -7,7 +7,7 @@ import { PhoneMapper } from 'src/phone/phone.mapper';
 @Injectable()
 export class ContactMapper {
   constructor(
-    private readonly phoneMapper: PhoneMapper,
+    readonly phoneMapper: PhoneMapper,
   ) { }
 
   mapEntityToDto(contact: Contact): ContactDto {
@@ -21,12 +21,15 @@ export class ContactMapper {
   }
 
   mapCreateContactDtoToEntity(dto: ContactCreateDto): Contact {
-    return {
+    let serverLogTest = {
       id: 0,
       firstName: dto.firstName,
       lastName: dto.lastName,
       emailAddress: dto.emailAddress,
       phoneNumbers: dto.phoneNumbers?.map(phoneNumber => this.phoneMapper.mapCreatePhoneDtoToEntity(phoneNumber))
     };
+    // Log contact data to server, including phoneNumbers array
+    console.log(serverLogTest)
+    return serverLogTest
   }
 }
