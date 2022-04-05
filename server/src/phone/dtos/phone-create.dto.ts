@@ -6,5 +6,6 @@ export class PhoneCreateDto {
   phoneNumber: string;
 
   @IsNotEmpty()
+  @IsEnum(PhoneType)
   phoneType: PhoneType;
 }

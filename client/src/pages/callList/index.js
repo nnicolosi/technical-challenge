@@ -17,6 +17,11 @@ const CallListPage = () => {
     getAllContacts().then((response) => {
       if (response.data && response.data.length) {
         console.log(response.data)
+        // Put data into an array and sort it alphabetically by last name, then first name
+        const callList = response.data.sort((a, b) => {
+          const sortByLast = a.lastName.localeCompare(b.lastName);
+          return sortByLast !== 0 ? sortByLast : a.firstName.localeCompare(b.firstName);
+        })
 
         const rows = response.data.map((row, rowIndex) => (
           <tr key={rowIndex}>
@@ -45,8 +50,8 @@ const CallListPage = () => {
           <table className="table is-fullwidth is-hoverable">
             <thead>
               <tr>
-                <th>LAST NAME</th>
                 <th>FIRST NAME</th>
+                <th>LAST NAME</th>
                 <th>HOME PHONE</th>
               </tr>
             </thead>
