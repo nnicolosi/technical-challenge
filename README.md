@@ -32,4 +32,24 @@ We'll look forward to reviewing your submission.
 
 # Candidate Section
 
-Your content here...
+## What is this application?
+
+This application allows the user to create, edit, and delete a contact. It also creates an alphabetically ordered list (by last name, then by first name) called a Call List. The Call List should only contain users that have Home phone numbers.
+
+## How do I run this application?
+
+To run this application, you'll need to have docker and node installed. If you need to install any of these, here are some helpful links:
+
+- [Node and NPM](https://nodejs.org)
+- [Docker Desktop](https://docs.docker.com/desktop)
+
+Once these are installed, follow these three steps:
+
+- Open your terminal and navigate to the /technical-challenge root folder and run `docker-compose up`
+- Once the Database is up and running, open another terminal window and navigate to /technical-challenge/server and run the `npm install` and `npm start` commands
+- Once the Nest.js server is up and running, open another terminal window and navigate to /technical-challenge/client and run the `npm install` and `npm start` commands
+- This should automatically open up a broswer window where you can use the application
+
+### Problems encountered while doing this challenge
+
+- I was able to recycle quite a bit of code since the majority of the application was already set up as a template. The primary problem that I had was getting the contact's phone number from the database to use on the front-end. I know that the front-end was sending the data to the server because I set up a console test to confirm. So the issue has to be with sending the data from the server to the DB. I tried to debug it for hours (the better part of an entire day), but wasn't able to figure it out. I'd love to know what the hangup was.
