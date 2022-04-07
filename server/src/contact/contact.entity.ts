@@ -20,7 +20,7 @@ export class Contact {
   @IsEmail()
   emailAddress: string;
 
-  @OneToMany(() => Phone, (phone) => phone.contact)
+  @OneToMany(() => Phone, (phone) => phone.contact, { eager: true, cascade: ["insert", "update", "remove"] })
   @ValidateNested()
   @ArrayUnique(phoneNumber => phoneNumber.phoneType)
   phoneNumbers: Phone[];

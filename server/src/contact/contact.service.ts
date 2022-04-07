@@ -19,9 +19,9 @@ export class ContactService {
   }
 
   async create(contact: Contact): Promise<Contact> {
-    const result = await this.contactRepository.insert(contact);
+    const result = await this.contactRepository.save(contact);
     return this.contactRepository.findOne({
-      where: { id: result?.identifiers[0].id },
+      where: { id: result?.id },
     });
   }
 

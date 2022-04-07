@@ -9,37 +9,31 @@ const ContactsPage = () => {
   const [tableRows, setTableRows] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
-  const formatHeader = (header) => {
-    return header.replace(/([a-zA-Z])(?=[A-Z])/g, '$1 ').toUpperCase();
-  };
-
-  const formatCell = (cell) => {
-    if (typeof cell === 'boolean') {
-      return cell ? 'Yes' : 'No';
-    }
-
-    return cell;
-  };
-
   useEffect(() => {
     getAllContacts().then((response) => {
       if (response.data && response.data.length) {
         const headers = (
           <tr>
-            {Object.getOwnPropertyNames(response.data[0]).map((header, index) => (
-              <th key={index}>{formatHeader(header)}</th>
-            ))}
+            <th key="id">Id</th>
+            <th key="lastName">Last Name</th>
+            <th key="firstName">First Name</th>
+            <th key="emailAddress">Email Address</th>
+            <th key="phoneTypes">Phone Types</th>
           </tr>
         );
         setTableHeaders(headers);
 
-        const rows = response.data.map((row, rowIndex) => (
-          <tr key={rowIndex}>
-            {Object.values(row).map((cell, cellIndex) => (
-              <td key={cellIndex}>{formatCell(cell)}</td>
-            ))}
-          </tr>
-        ));
+        const rows = response.data
+          .sort((a, b) => a.id - b.id)
+          .map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              <td key="id">{row.id}</td>
+              <td key="lastName">{row.lastName}</td>
+              <td key="firstName">{row.firstName}</td>
+              <td key="emailAddress">{row.emailAddress}</td>
+              <td key="phoneTypes">{row.phoneNumbers.map((p) => p.phoneType).join(', ')}</td>
+            </tr>
+          ));
         setTableRows(rows);
       }
     });
