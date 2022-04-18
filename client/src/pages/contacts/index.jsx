@@ -9,6 +9,10 @@ const ContactsPage = () => {
   const [tableRows, setTableRows] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
+  const getContact = (id) => {
+
+  }
+
   useEffect(() => {
     getAllContacts().then((response) => {
       if (response.data && response.data.length) {
