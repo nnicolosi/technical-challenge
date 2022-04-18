@@ -1,26 +1,39 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import ModalContext from '../../contexts/modal-context';
 import { createContact } from '../../services/contact.service';
 import './contact-modal.scss';
 
-const ContactModal = () => {
+const ContactModal = ({contact, setContact}) => {
   const modalContext = useContext(ModalContext);
   const [formDisabled, setFormDisabled] = useState(false);
+  console.log(contact, "contact")
 
   const {
     control,
     formState: { errors },
     handleSubmit,
     register,
+    setValue,
     reset,
+    watch
   } = useForm();
 
   const { append, fields, remove } = useFieldArray({
     control,
     name: 'phoneNumbers',
   });
+  console.log(watch())
 
+  useEffect(() => {
+    if (contact) {
+      setValue('firstName', contact.firstName);
+      setValue('lastName', contact.lastName);
+      setValue('emailAddress', contact.emailAddress);
+      setValue('phoneNumbers', contact.phoneNumbers);
+    }
+    
+  }, [contact])
   const onValid = (data) => {
     setFormDisabled(true);
     createContact(data).then(

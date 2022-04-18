@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import { getAllContacts } from '../../services/contact.service';
+import { getAllContacts, getContactById } from '../../services/contact.service';
 import ContactModal from '../../components/contact-modal';
 import ModalContext from '../../contexts/modal-context';
 import './contacts.scss';
@@ -8,10 +8,8 @@ const ContactsPage = () => {
   const [tableHeaders, setTableHeaders] = useState([]);
   const [tableRows, setTableRows] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [contact, setContact] = useState()
 
-  const getContact = (id) => {
-
-  }
 
   useEffect(() => {
     getAllContacts().then((response) => {
@@ -39,7 +37,16 @@ const ContactsPage = () => {
                 {row.phoneNumbers.map((p) => p.phoneType).join(', ')}
               </td>
               <td>
-                <button onClick={() => setShowModal(true)}>Edit</button>
+                <button onClick={() => {
+                  getContactById(row.id).then(response => {
+                    setContact(response.data)
+                    setShowModal(true)
+                  })
+                    .catch(err => {
+                    throw new Error(err)
+                  })
+                }
+                }>Edit</button>
               </td>
               <td>
                 <button>Delete</button>
@@ -69,7 +76,7 @@ const ContactsPage = () => {
         </div>
       </div>
       <ModalContext.Provider value={{ showModal: showModal, closeModal: () => setShowModal(false) }}>
-        <ContactModal />
+        <ContactModal contact={contact} setContact={setContact}/>
       </ModalContext.Provider>
     </div>
   );
