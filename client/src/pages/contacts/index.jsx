@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import { getAllContacts, getContactById } from '../../services/contact.service';
+import { deleteContact, getAllContacts, getContactById } from '../../services/contact.service';
 import ContactModal from '../../components/contact-modal';
 import ModalContext from '../../contexts/modal-context';
 import './contacts.scss';
@@ -8,6 +8,7 @@ const ContactsPage = () => {
   const [tableHeaders, setTableHeaders] = useState([]);
   const [tableRows, setTableRows] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [contact, setContact] = useState()
 
 
@@ -49,7 +50,7 @@ const ContactsPage = () => {
                 }>Edit</button>
               </td>
               <td>
-                <button>Delete</button>
+                <button onClick={() => deleteContact(row.id)}>Delete</button>
               </td>
             </tr>
           ));
@@ -59,24 +60,34 @@ const ContactsPage = () => {
   }, [showModal]);
 
   return (
-    <div className="contacts-page">
-      <div className="section">
-        <div className="container">
-          <div className="container page-header">
-            <h6 className="title">Contacts</h6>
-            <button className="button is-primary create-contact-button" onClick={() => setShowModal(true)}>
+    <div className='contacts-page'>
+      <div className='section'>
+        <div className='container'>
+          <div className='container page-header'>
+            <h6 className='title'>Contacts</h6>
+            <button
+              className='button is-primary create-contact-button'
+              onClick={() => setShowModal(true)}
+            >
               Create Contact
             </button>
           </div>
           <hr />
-          <table className="table is-fullwidth is-hoverable">
+          <table className='table is-fullwidth is-hoverable'>
             <thead>{tableHeaders}</thead>
             <tbody>{tableRows}</tbody>
           </table>
         </div>
       </div>
-      <ModalContext.Provider value={{ showModal: showModal, closeModal: () => setShowModal(false) }}>
-        <ContactModal contact={contact} setContact={setContact}/>
+      <ModalContext.Provider
+        value={{ showModal: showModal, closeModal: () => setShowModal(false) }}
+      >
+        <ContactModal contact={contact} setContact={setContact} />
+      </ModalContext.Provider>
+      <ModalContext.Provider
+        value={{ showModal: deleteModal, closeModal: () => setDeleteModal(false) }}
+      >
+        <DeleteModal contact={contact} setContact={setContact} />
       </ModalContext.Provider>
     </div>
   );
