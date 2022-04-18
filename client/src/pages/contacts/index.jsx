@@ -27,11 +27,19 @@ const ContactsPage = () => {
           .sort((a, b) => a.id - b.id)
           .map((row, rowIndex) => (
             <tr key={rowIndex}>
-              <td key="id">{row.id}</td>
-              <td key="lastName">{row.lastName}</td>
-              <td key="firstName">{row.firstName}</td>
-              <td key="emailAddress">{row.emailAddress}</td>
-              <td key="phoneTypes">{row.phoneNumbers.map((p) => p.phoneType).join(', ')}</td>
+              <td key='id'>{row.id}</td>
+              <td key='lastName'>{row.lastName}</td>
+              <td key='firstName'>{row.firstName}</td>
+              <td key='emailAddress'>{row.emailAddress}</td>
+              <td key='phoneTypes'>
+                {row.phoneNumbers.map((p) => p.phoneType).join(', ')}
+              </td>
+              <td>
+                <button onClick={() => setShowModal(true)}>Edit</button>
+              </td>
+              <td>
+                <button>Delete</button>
+              </td>
             </tr>
           ));
         setTableRows(rows);
