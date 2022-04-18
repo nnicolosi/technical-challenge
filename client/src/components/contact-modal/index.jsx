@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import ModalContext from '../../contexts/modal-context';
-import { createContact } from '../../services/contact.service';
+import { createContact, updateContact } from '../../services/contact.service';
 import './contact-modal.scss';
 
 const ContactModal = ({contact, setContact}) => {
@@ -30,22 +30,40 @@ const ContactModal = ({contact, setContact}) => {
       setValue('firstName', contact.firstName);
       setValue('lastName', contact.lastName);
       setValue('emailAddress', contact.emailAddress);
-      setValue('phoneNumbers', contact.phoneNumbers);
+      contact.phoneNumbers.map(phone => {
+        return append(phone)
+      })
     }
     
   }, [contact])
+
   const onValid = (data) => {
     setFormDisabled(true);
-    createContact(data).then(
-      (response) => {
-        modalContext.closeModal();
-        reset();
+   
+    if (contact) {
+      data.id = contact.id
+      updateContact(data).then(response => {
+        console.log(response, "response")
+        modalContext.closeModal()
+        reset()
+        setContact()
         setFormDisabled(false);
-      },
-      (errors) => {
-        setFormDisabled(false);
-      }
-    );
+      })
+        .catch(err => {
+        console.dir(err)
+      })
+    } else {
+      createContact(data).then(
+        (response) => {
+          modalContext.closeModal();
+          reset();
+          setFormDisabled(false);
+        },
+        (errors) => {
+          setFormDisabled(false);
+        }
+      );
+    }
   };
 
   const onClose = () => {

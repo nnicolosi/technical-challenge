@@ -5,7 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  Put,
+  Patch,
   Delete
 } from '@nestjs/common';
 import { ContactCreateDto } from './dtos/contact-create.dto';
@@ -43,15 +43,12 @@ export class ContactController {
     return this.contactMapper.mapEntityToDto(response);
   }
 
-  @Put()
-   async updateContact(@Body() contactDto: ContactDto) {
-    const contact = await this.contactMapper.mapEntityToDto(contactDto);
-    const response = await this.contactService.update(contact)
-    return response;
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() contactDto: ContactDto) {
+    return this.contactService.update(contactDto);
   }
-
   @Delete(':id')
-  async deleteContact(@Param('id') id: number){
-    const response = await this.contactService.delete(id)
+  async deleteContact(@Param('id') id: number) {
+    const response = await this.contactService.delete(id);
   }
 }

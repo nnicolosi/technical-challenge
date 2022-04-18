@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateEvent, UpdateResult } from 'typeorm';
 import { Contact } from './contact.entity';
 import { CONTACT_REPOSITORY } from '../common/constants';
 
@@ -20,14 +20,13 @@ export class ContactService {
 
   async create(contact: Contact): Promise<Contact> {
     const result = await this.contactRepository.save(contact);
-    return this.contactRepository.findOne({
-      where: { id: result?.id },
-    });
+    return result;
+    
   }
 
   async update(contact: Contact): Promise<Contact> {
     const result = await this.contactRepository.save(contact);
-    return this.contactRepository.findOne({ where: { id: contact.id } });
+    return result;
   }
 
   async delete(id: number): Promise<DeleteResult | undefined> {
