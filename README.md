@@ -55,4 +55,10 @@ This app was created as part of a technical review for Expression Networks.  Thi
 ### Call List Page
 ![Screenshot](./client/src/images/Screenshot2.jpg)
 
+### Edit Contact
+![Screenshot](./client/src/images/Screenshot3.jpg)
+
+### Delete Contact
+![Screenshot](./client/src/images/Screenshot4.jpg)
+
 
