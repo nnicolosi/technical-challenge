@@ -32,4 +32,13 @@ We'll look forward to reviewing your submission.
 
 # Candidate Section
 
-Your content here...
+## Introduction
+
+This app was created as part of a technical review for Expression Networks.  This application allows a user to create a new contact, edit a contact, delete a contact and also view a list of contacts.  There is also a call list page that will list the contacts in alphabetical order by last name, first name and the home phone.  If no home number is available, then the contact is not listed.
+
+
+
+![Screenshot](./client/src/images/Screenshot1.jpg)
+![Screenshot](./client/src/images/Screenshot2.jpg)
+
+
