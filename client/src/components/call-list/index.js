@@ -1,60 +1,69 @@
 import { React, useEffect, useState } from 'react';
-import { getAllContacts, getContactById } from '../../services/contact.service';
-import ContactModal from '../../components/contact-modal';
+import { getAllContacts} from '../../services/contact.service';
 import DeleteModal from '../../components/delete-modal';
 import ModalContext from '../../contexts/modal-context';
-import './contacts.scss';
 
-const ContactsPage = () => {
+
+const CallList = () => {
   const [tableHeaders, setTableHeaders] = useState([]);
   const [tableRows, setTableRows] = useState([]);
   const [contactModal, setContactModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [contact, setContact] = useState()
-
+  const [contact, setContact] = useState();
 
   useEffect(() => {
     getAllContacts().then((response) => {
       if (response.data && response.data.length) {
         const headers = (
           <tr>
-            <th key="id">Id</th>
-            <th key="lastName">Last Name</th>
-            <th key="firstName">First Name</th>
-            <th key="emailAddress">Email Address</th>
-            <th key="phoneTypes">Phone Types</th>
+            <th key='id'>Id</th>
+            <th key='lastName'>Last Name</th>
+            <th key='firstName'>First Name</th>
+            <th key='homePhone'>Home Phone</th>
           </tr>
         );
         setTableHeaders(headers);
 
         const rows = response.data
-          .sort((a, b) => a.id - b.id)
+          .sort((a, b) => a.lastName - b.lastName)
           .map((row, rowIndex) => (
             <tr key={rowIndex}>
               <td key='id'>{row.id}</td>
               <td key='lastName'>{row.lastName}</td>
               <td key='firstName'>{row.firstName}</td>
-              <td key='emailAddress'>{row.emailAddress}</td>
-              <td key='phoneTypes'>
-                {row.phoneNumbers.map((p) => p.phoneType).join(', ')}
+            
+              <td key='homePhone'>
+                {row.phoneNumbers.map((p) => {
+                  if (p.phoneType === 'Home') {
+                    return p.phoneNumber
+                  }
+                }}
               </td>
               <td>
-                <button onClick={() => {
-                  getContactById(row.id).then(response => {
-                    setContact(response.data)
-                    setContactModal(true)
-                  })
-                    .catch(err => {
-                    throw new Error(err)
-                  })
-                }
-                }>Edit</button>
+                <button
+                  onClick={() => {
+                    getContactById(row.id)
+                      .then((response) => {
+                        setContact(response.data);
+                        setContactModal(true);
+                      })
+                      .catch((err) => {
+                        throw new Error(err);
+                      });
+                  }}
+                >
+                  Edit
+                </button>
               </td>
               <td>
-                <button onClick={() => {
-                  setContact(row.id)
-                  setDeleteModal(true)
-                }}>Delete</button>
+                <button
+                  onClick={() => {
+                    setContact(row.id);
+                    setDeleteModal(true);
+                  }}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ));
@@ -84,12 +93,18 @@ const ContactsPage = () => {
         </div>
       </div>
       <ModalContext.Provider
-        value={{ showModal: contactModal, closeModal: () => setContactModal(false) }}
+        value={{
+          showModal: contactModal,
+          closeModal: () => setContactModal(false),
+        }}
       >
         <ContactModal contact={contact} setContact={setContact} />
       </ModalContext.Provider>
       <ModalContext.Provider
-        value={{ showModal: deleteModal, closeModal: () => setDeleteModal(false) }}
+        value={{
+          showModal: deleteModal,
+          closeModal: () => setDeleteModal(false),
+        }}
       >
         <DeleteModal contact={contact} />
       </ModalContext.Provider>
@@ -97,4 +112,4 @@ const ContactsPage = () => {
   );
 };
 
-export default ContactsPage;
+export default CallList;
