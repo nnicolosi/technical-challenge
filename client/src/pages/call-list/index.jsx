@@ -97,7 +97,7 @@ const CallList = () => {
       <div className='section'>
         <div className='container'>
           <div className='container page-header'>
-            <h6 className='title'>Contacts</h6>
+            <h6 className='title'>Call List</h6>
             <button
               className='button is-primary create-contact-button'
               onClick={() => setContactModal(true)}
