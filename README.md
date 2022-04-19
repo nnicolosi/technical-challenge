@@ -48,7 +48,11 @@ This app was created as part of a technical review for Expression Networks.  Thi
 
 
 ## Screenshots
+
+### Contacts Page
 ![Screenshot](./client/src/images/Screenshot1.jpg)
+
+### Call List Page
 ![Screenshot](./client/src/images/Screenshot2.jpg)
 
 
