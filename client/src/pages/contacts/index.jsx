@@ -25,7 +25,7 @@ const ContactsPage = () => {
             <th key="phoneTypes">Phone Types</th>
           </tr>
         );
-        setTableHeaders(headers);
+        setTableHeaders(headers); 
 
         const rows = response.data
           .sort((a, b) => a.id - b.id)

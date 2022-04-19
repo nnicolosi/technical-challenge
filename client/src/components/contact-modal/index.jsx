@@ -4,10 +4,9 @@ import ModalContext from '../../contexts/modal-context';
 import { createContact, updateContact } from '../../services/contact.service';
 import './contact-modal.scss';
 
-const ContactModal = ({contact, setContact}) => {
+const ContactModal = ({ contact, setContact }) => {
   const modalContext = useContext(ModalContext);
   const [formDisabled, setFormDisabled] = useState(false);
-
 
   const {
     control,
@@ -16,55 +15,53 @@ const ContactModal = ({contact, setContact}) => {
     register,
     setValue,
     reset,
-    watch
   } = useForm();
 
   const { append, fields, remove } = useFieldArray({
     control,
     name: 'phoneNumbers',
   });
-  console.log(watch())
 
   useEffect(() => {
     if (modalContext.showModal && contact) {
       setValue('firstName', contact.firstName);
       setValue('lastName', contact.lastName);
       setValue('emailAddress', contact.emailAddress);
-      contact.phoneNumbers.map(phone => {
-        return append(phone)
-      })
+      contact.phoneNumbers.map((phone) => {
+        return append(phone);
+      });
     }
-    
-  }, [contact])
+  }, [contact, modalContext.showModal]);
 
   const onValid = (data) => {
     setFormDisabled(true);
-   
+
     if (contact) {
-      data.id = contact.id
-      updateContact(data).then(response => {
-        console.log(response, "response")
-        modalContext.closeModal()
-        reset()
-        setContact()
-        setFormDisabled(false);
-      })
-        .catch(err => {
-        console.dir(err)
-      })
+      data.id = contact.id;
+      updateContact(data)
+        .then(() => {
+          modalContext.closeModal();
+          reset();
+          setContact();
+          setFormDisabled(false);
+        })
+        .catch((err) => {
+        window.alert(err)
+        });
     } else {
       createContact(data).then(
-        (response) => {
+        () => {
           modalContext.closeModal();
           reset();
           setFormDisabled(false);
-        },
-        (errors) => {
-          setFormDisabled(false);
-        }
-      );
+        })
+        .catch(err => {
+          setFormDisabled(err)
+          window.alert(err)
+      })
+       }
     }
-  };
+  
 
   const onClose = () => {
     modalContext.closeModal();
@@ -72,13 +69,21 @@ const ContactModal = ({contact, setContact}) => {
   };
 
   const getPhoneNumberError = (index) => {
-    if (errors.phoneNumbers && errors.phoneNumbers[index] && errors.phoneNumbers[index].phoneNumber) {
+    if (
+      errors.phoneNumbers &&
+      errors.phoneNumbers[index] &&
+      errors.phoneNumbers[index].phoneNumber
+    ) {
       return errors.phoneNumbers[index].phoneNumber;
     }
   };
 
   const getPhoneTypeError = (index) => {
-    if (errors.phoneNumbers && errors.phoneNumbers[index] && errors.phoneNumbers[index].phoneType) {
+    if (
+      errors.phoneNumbers &&
+      errors.phoneNumbers[index] &&
+      errors.phoneNumbers[index].phoneType
+    ) {
       return errors.phoneNumbers[index].phoneType;
     }
   };
