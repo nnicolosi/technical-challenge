@@ -40,9 +40,9 @@ This app was created as part of a technical review for Expression Networks.  Thi
 | Method | Endpoint                  | Access Control | Description                                |
 | ------ | ------------------------- | -------------- | ------------------------------------------ |
 | POST   | `/contact`                | all users      | Adds a new contact                         |
-| GET    | `/contact`                | all users      | get all contacts                           |
-| GET    | `/contact/:id`            | all users      | get a contact by ID                        |
-| PATCH  | `/contact/:id`            | all users      | update contact                             |
+| GET    | `/contact`                | all users      | Get all contacts                           |
+| GET    | `/contact/:id`            | all users      | Get a contact by ID                        |
+| PATCH  | `/contact/:id`            | all users      | Update a contact                           |
 | DELETE | `/contact/:id`            | all users      | Delete a contact                           |
 
 
