@@ -7,7 +7,7 @@ import './contact-modal.scss';
 const ContactModal = ({contact, setContact}) => {
   const modalContext = useContext(ModalContext);
   const [formDisabled, setFormDisabled] = useState(false);
-  console.log(contact, "contact")
+
 
   const {
     control,
@@ -26,7 +26,7 @@ const ContactModal = ({contact, setContact}) => {
   console.log(watch())
 
   useEffect(() => {
-    if (contact) {
+    if (modalContext.showModal && contact) {
       setValue('firstName', contact.firstName);
       setValue('lastName', contact.lastName);
       setValue('emailAddress', contact.emailAddress);
