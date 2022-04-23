@@ -1,4 +1,11 @@
 .contacts-page {
+  .manage-button {
+    width: 25%;
+    margin: 0 10px;
+  }
+  .manage-container {
+    display: flex;
+  }
   .page-header {
     .create-contact-button {
       position: absolute;
