@@ -15,7 +15,7 @@ export class PhoneMapper {
 
   mapCreatePhoneDtoToEntity(dto: PhoneCreateDto): Phone {
     return {
-      id: 0,
+      id: undefined,
       phoneNumber: dto.phoneNumber,
       phoneType: dto.phoneType,
     };

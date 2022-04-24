@@ -22,7 +22,7 @@ export class ContactMapper {
 
   mapCreateContactDtoToEntity(dto: ContactCreateDto): Contact {
     return {
-      id: 0,
+      id: undefined,
       firstName: dto.firstName,
       lastName: dto.lastName,
       emailAddress: dto.emailAddress,
