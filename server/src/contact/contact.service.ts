@@ -29,4 +29,9 @@ export class ContactService {
     const result = await this.contactRepository.save(contact);
     return this.contactRepository.findOne({ where: { id: contact.id } });
   }
+
+  async remove(contact: Contact): Promise<Contact> {
+    const result = await this.contactRepository.remove(contact);
+    return this.contactRepository.findOne({ where: { id: contact.id }});
+  }
 }
