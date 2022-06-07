@@ -11,11 +11,11 @@ services:
     volumes:
       - ./data:/var/lib/postgresql/data/
     ports:
-      # other services can access within the network at localdb:5432
-      - 5432:5432
+      # other services can access within the network at localdb:5433
+      - 5433:5432
     expose:
-      # opens localhost:5432 for access outside the network
-      - 5432
+      # opens localhost:5433 for access outside the network
+      - 5433
     networks:
       - technical-challenge-network
 networks:
