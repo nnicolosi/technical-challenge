@@ -1,5 +1,5 @@
 # Technical Challenge
-This repository is the starting point of a full-stack developer technical challenge.  You'll need to have Node, NPM, and Docker installed on your machine.  If you need to install any of these, here are some helpful links:
+This repository is the starting point of a full-stack developer technical challenge.  You'll need to have Node (v14.17.1), NPM (v6.14.13), and Docker installed on your machine.  If you need to install any of these, here are some helpful links:
 
 - [Node and NPM](https://nodejs.org)
 - [Docker Desktop](https://docs.docker.com/desktop)
