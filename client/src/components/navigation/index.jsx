@@ -13,7 +13,16 @@ const Navigation = () => {
         Contacts
       </NavLink>
     );
-
+  items.push(
+    <NavLink
+      key='call-list'
+      className='navbar-item'
+      to='/call-list'
+      activeClassName='active'
+    >
+      Call List
+    </NavLink>
+  );
     return items;
   };
 

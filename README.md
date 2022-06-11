@@ -32,4 +32,33 @@ We'll look forward to reviewing your submission.
 
 # Candidate Section
 
-Your content here...
+## Introduction
+
+This app was created as part of a technical review for Expression Networks.  This application allows a user to create a new contact, edit a contact, delete a contact and also view a list of contacts.  There is also a call list page that will list the contacts in alphabetical order by last name, first name and the home phone.  If no home number is available, then the contact is not listed.
+
+## Backend
+| Method | Endpoint                  | Access Control | Description                                |
+| ------ | ------------------------- | -------------- | ------------------------------------------ |
+| POST   | `/contact`                | all users      | Adds a new contact                         |
+| GET    | `/contact`                | all users      | Get all contacts                           |
+| GET    | `/contact/:id`            | all users      | Get a contact by ID                        |
+| PATCH  | `/contact/:id`            | all users      | Update a contact                           |
+| DELETE | `/contact/:id`            | all users      | Delete a contact                           |
+
+
+
+## Screenshots
+
+### Contacts Page
+![Screenshot](./client/src/images/Screenshot1.jpg)
+
+### Call List Page
+![Screenshot](./client/src/images/Screenshot2.jpg)
+
+### Edit Contact
+![Screenshot](./client/src/images/Screenshot3.jpg)
+
+### Delete Contact
+![Screenshot](./client/src/images/Screenshot4.jpg)
+
+
