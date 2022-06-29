@@ -2,20 +2,17 @@ import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './navigation.scss';
 
+// We can store the data for each NavLink in a list to help modularize the code a bit
+// If this list was lengthy enough we might want to import it from a separate file.
+const startMenuObjects = [
+  {key: 'contacts', className: 'navbar-item', to: '/contacts', activeClassName: 'active', textContent: 'Contacts'},
+  {key: 'call-list', className: 'navbar-item', to: '/call-list', activeClassName: 'active', textContent: 'Call List'},
+]
+
 const Navigation = () => {
   const [burgerMenuToggle, setBurgerMenuToggle] = useState(false);
 
-  const startMenuItems = () => {
-    const items = [];
-
-    items.push(
-      <NavLink key="contacts" className="navbar-item" to="/contacts" activeClassName="active">
-        Contacts
-      </NavLink>
-    );
-
-    return items;
-  };
+  const startMenuItems = () => startMenuObjects.map(({ textContent, ...props }) => <NavLink {...props}>{textContent}</NavLink>);
 
   const endMenuItems = () => {
     const items = [];

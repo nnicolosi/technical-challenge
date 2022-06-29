@@ -1,12 +1,16 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import ModalContext from '../../contexts/modal-context';
-import { createContact } from '../../services/contact.service';
+import { createContact, updateContact, deleteContact } from '../../services/contact.service';
 import './contact-modal.scss';
 
 const ContactModal = () => {
   const modalContext = useContext(ModalContext);
   const [formDisabled, setFormDisabled] = useState(false);
+  // destructure `selectedContact` from `modalContext` and use it to populate default form values if it contains data.
+  const { selectedContact } = modalContext
+  // assume that we are editing a contact if `selectedContact` is hydrated
+  const update = !!Object.keys(selectedContact).length
 
   const {
     control,
@@ -14,6 +18,8 @@ const ContactModal = () => {
     handleSubmit,
     register,
     reset,
+    setValue,
+    setError,
   } = useForm();
 
   const { append, fields, remove } = useFieldArray({
@@ -21,9 +27,52 @@ const ContactModal = () => {
     name: 'phoneNumbers',
   });
 
+  // delegates between `createContact()` (if `update` === false) and `updateContact()` (if `update` === true)
+  const submitContact = (data) => {
+    if (!update) {
+      return createContact(data)
+    } else {
+      const { id } = selectedContact
+      return updateContact({...data, id})
+    }
+  }
+
   const onValid = (data) => {
     setFormDisabled(true);
-    createContact(data).then(
+    submitContact(data).then(
+      (response) => {
+        console.log('in response')
+        console.log(response)
+        modalContext.closeModal();
+        reset();
+        setFormDisabled(false);
+      },
+      (errors) => {
+        // The backend will return a specific error message when it cannot validate the
+        // value of `emailAddress` as an email address, utilizing the 'validator' library
+        // to check against the string. The regex used by `useForm()` to validate the email
+        // is not equivalent (nor as robust) as the 'validator' library.
+        //
+        // This is a quick and dirty band-aid that will display an error message to the user
+        // when `useForm()` validation passes and the backend validation fails while attempting 
+        // to create a new contact. 
+        //
+        // If a contact is being updated the backend will not validate the value of `emailAddress` 
+        // and the regex pattern passed to `useForm()` becomes the only validation. This results in 
+        // inconsistent behavior between "creating" and "updating" a contact and should be addressed
+        // in the future.  
+        const [ errorMessage ] = errors.response.data.message
+        if (errorMessage === 'emailAddress must be an email') {
+          setError('emailAddress',  { type: 'pattern' })
+        }
+        setFormDisabled(false);
+      }
+    );
+  };
+
+  const onDeleteContact = () => {
+    setFormDisabled(true);
+    deleteContact(selectedContact).then(
       (response) => {
         modalContext.closeModal();
         reset();
@@ -51,6 +100,19 @@ const ContactModal = () => {
       return errors.phoneNumbers[index].phoneType;
     }
   };
+ 
+  useEffect(() => {
+    // if `update` is true then we want to update the form values with existing data
+    if (update) {
+      const { firstName, lastName, emailAddress, phoneNumbers } = selectedContact
+      setValue('firstName', firstName)
+      setValue('lastName', lastName)
+      setValue('emailAddress', emailAddress)
+      phoneNumbers.forEach((item) => {
+        append({...item})
+      })
+    }
+  }, [update, selectedContact, append, setValue])
 
   return (
     <div className={`modal ${modalContext.showModal ? 'is-active' : ''}`}>
@@ -154,6 +216,12 @@ const ContactModal = () => {
             <button type="submit" className="button is-primary" disabled={formDisabled}>
               Submit
             </button>
+            {
+              update &&
+                <button type="button" className="button is-primary" disabled={formDisabled} onClick={onDeleteContact}>
+                  Delete
+                </button>
+            }
           </div>
         </form>
       </div>

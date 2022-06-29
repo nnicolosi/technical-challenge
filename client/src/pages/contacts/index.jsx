@@ -8,6 +8,21 @@ const ContactsPage = () => {
   const [tableHeaders, setTableHeaders] = useState([]);
   const [tableRows, setTableRows] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [selectedContact, setSelectedContact] = useState({})
+
+  // We pass the entire row data (contact) to this handler when a row is clicked.
+  // We set the value of `selectedContact` to the row data and pass `selectedContact`
+  // into `ModalContext` which allows the modal to populate the fields with the contact info.
+  const onRowClick = (rowData) => {
+    setSelectedContact(rowData);
+    setShowModal(true);
+  };
+
+  // Every time the modal is closed we should reset the value of `selectedContact`
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedContact({});
+  };
 
   useEffect(() => {
     getAllContacts().then((response) => {
@@ -26,7 +41,7 @@ const ContactsPage = () => {
         const rows = response.data
           .sort((a, b) => a.id - b.id)
           .map((row, rowIndex) => (
-            <tr key={rowIndex}>
+            <tr key={rowIndex} onClick={() => onRowClick(row)}>
               <td key="id">{row.id}</td>
               <td key="lastName">{row.lastName}</td>
               <td key="firstName">{row.firstName}</td>
@@ -56,7 +71,7 @@ const ContactsPage = () => {
           </table>
         </div>
       </div>
-      <ModalContext.Provider value={{ showModal: showModal, closeModal: () => setShowModal(false) }}>
+      <ModalContext.Provider value={{ showModal, selectedContact, closeModal }}>
         <ContactModal />
       </ModalContext.Provider>
     </div>
