@@ -32,4 +32,11 @@ We'll look forward to reviewing your submission.
 
 # Candidate Section
 
-Your content here...
+This is a contact management tool. Here, you can add, view, update, and remove contacts. Additionally, there is a call list page, where users with home phone numbers will have their full name and home phone numbers displayed, sorted by last name then first name. 
+
+This tool was built with React JS and Bulma on the front end with Node JS and Nest on the backend. This application can be run and developed on by following these steps:
+- Installing dependencies, launching, and initializing a containerized (Docker) Postgres database using the `docker-compose up` command after navigating to the root of the repository.
+- Installing dependencies and launching a backend API (Nest, Node, TypeScript) using the `npm install` and `npm start` commands after navigating to the `/server` directory.
+- Installing dependencies and launching a frontend UI (React, JavaScript) using the `npm install` and `npm start` commands after navigating to the `/client` directory.
+
+If you have any questions, pleae do not hesitate to email me at emilyb0280@gmail.com. Best of luck and happy coding : )

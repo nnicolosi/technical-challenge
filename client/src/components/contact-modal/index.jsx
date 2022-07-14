@@ -1,13 +1,14 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import ModalContext from '../../contexts/modal-context';
-import { createContact } from '../../services/contact.service';
+import { createContact, updateContact } from '../../services/contact.service';
 import './contact-modal.scss';
 
 const ContactModal = () => {
   const modalContext = useContext(ModalContext);
   const [formDisabled, setFormDisabled] = useState(false);
-
+  const [editMode, setEditMode] = useState(false);
+  
   const {
     control,
     formState: { errors },
@@ -23,16 +24,29 @@ const ContactModal = () => {
 
   const onValid = (data) => {
     setFormDisabled(true);
-    createContact(data).then(
-      (response) => {
-        modalContext.closeModal();
-        reset();
-        setFormDisabled(false);
-      },
-      (errors) => {
-        setFormDisabled(false);
-      }
-    );
+    if (editMode) {
+      updateContact({...data, id: modalContext.rowToEdit.id}).then(
+        (response) => {
+          modalContext.closeModal();
+          reset();
+          setFormDisabled(false);
+        },
+        (errors) => {
+          setFormDisabled(false);
+        }
+      );
+    } else {
+      createContact(data).then(
+        (response) => {
+          modalContext.closeModal();
+          reset();
+          setFormDisabled(false);
+        },
+        (errors) => {
+          setFormDisabled(false);
+        }
+      );
+    }
   };
 
   const onClose = () => {
@@ -51,12 +65,31 @@ const ContactModal = () => {
       return errors.phoneNumbers[index].phoneType;
     }
   };
+  useEffect(()=>{
+    if (Object.keys(modalContext.rowToEdit).length === 0){
+      setEditMode(false)
+    } else {
+      setEditMode(true)
+      reset({
+        firstName: modalContext.rowToEdit.firstName,
+        lastName: modalContext.rowToEdit.lastName,
+        emailAddress: modalContext.rowToEdit.emailAddress
+      })
+      modalContext.rowToEdit.phoneNumbers.forEach((number)=> {
+        append({phoneNumber: number.phoneNumber, phoneType: number.phoneType})
+      })
+    }
+  }, [modalContext.rowToEdit, reset, append])
 
   return (
     <div className={`modal ${modalContext.showModal ? 'is-active' : ''}`}>
       <div className="modal-background"></div>
       <div className="modal-content">
         <form className="box contact-form" onSubmit={handleSubmit(onValid)}>
+          <div className="container page-header">
+            <h6 className="title"> {editMode ? "Edit Contact" : "Create Contact"} </h6>
+          </div>
+          <hr />
           <div className="field">
             <label className="label">
               First Name<span className="required">*</span>
@@ -152,7 +185,7 @@ const ContactModal = () => {
           <br />
           <div className="buttons is-centered">
             <button type="submit" className="button is-primary" disabled={formDisabled}>
-              Submit
+              {editMode ? 'Save' : 'Submit'}
             </button>
           </div>
         </form>
