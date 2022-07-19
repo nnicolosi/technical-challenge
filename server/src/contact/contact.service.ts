@@ -8,7 +8,7 @@ export class ContactService {
   constructor(
     @Inject(CONTACT_REPOSITORY)
     private contactRepository: Repository<Contact>,
-  ) { }
+  ) {}
 
   async findAll(): Promise<Contact[]> {
     return this.contactRepository.find();
@@ -28,5 +28,10 @@ export class ContactService {
   async update(contact: Contact): Promise<Contact> {
     const result = await this.contactRepository.save(contact);
     return this.contactRepository.findOne({ where: { id: contact.id } });
+  }
+
+  async remove(contact: Contact): Promise<Contact> {
+    const result = await this.contactRepository.remove(contact);
+    return result;
   }
 }

@@ -3,12 +3,11 @@ import { Injectable } from '@nestjs/common';
 import { Contact } from './contact.entity';
 import { ContactDto } from './dtos/contact.dto';
 import { PhoneMapper } from 'src/phone/phone.mapper';
+import { ContactUpdateDto } from './dtos/contact-update.dto';
 
 @Injectable()
 export class ContactMapper {
-  constructor(
-    private readonly phoneMapper: PhoneMapper,
-  ) { }
+  constructor(private readonly phoneMapper: PhoneMapper) {}
 
   mapEntityToDto(contact: Contact): ContactDto {
     return {
@@ -16,17 +15,33 @@ export class ContactMapper {
       firstName: contact.firstName,
       lastName: contact.lastName,
       emailAddress: contact.emailAddress,
-      phoneNumbers: contact.phoneNumbers?.map(phoneNumber => this.phoneMapper.mapEntityToDto(phoneNumber))
+      phoneNumbers: contact.phoneNumbers?.map((phoneNumber) =>
+        this.phoneMapper.mapEntityToDto(phoneNumber),
+      ),
     };
   }
 
   mapCreateContactDtoToEntity(dto: ContactCreateDto): Contact {
     return {
-      id: undefined,
+      id: 0,
       firstName: dto.firstName,
       lastName: dto.lastName,
       emailAddress: dto.emailAddress,
-      phoneNumbers: dto.phoneNumbers?.map(phoneNumber => this.phoneMapper.mapCreatePhoneDtoToEntity(phoneNumber))
+      phoneNumbers: dto.phoneNumbers?.map((phoneNumber) =>
+        this.phoneMapper.mapCreatePhoneDtoToEntity(phoneNumber),
+      ),
+    };
+  }
+
+  mapUpdateContactDtoToEntity(dto: ContactUpdateDto): Contact {
+    return {
+      id: dto.id,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      emailAddress: dto.emailAddress,
+      phoneNumbers: dto.phoneNumbers?.map((phoneNumber) =>
+        this.phoneMapper.mapCreatePhoneDtoToEntity(phoneNumber),
+      ),
     };
   }
 }
