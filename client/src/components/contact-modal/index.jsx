@@ -1,10 +1,10 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import ModalContext from '../../contexts/modal-context';
-import { createContact } from '../../services/contact.service';
+import { createContact, updateContact } from '../../services/contact.service';
 import './contact-modal.scss';
 
-const ContactModal = () => {
+const ContactModal = ({ contact, setContact }) => {
   const modalContext = useContext(ModalContext);
   const [formDisabled, setFormDisabled] = useState(false);
 
@@ -13,6 +13,7 @@ const ContactModal = () => {
     formState: { errors },
     handleSubmit,
     register,
+    setValue,
     reset,
   } = useForm();
 
@@ -21,19 +22,46 @@ const ContactModal = () => {
     name: 'phoneNumbers',
   });
 
+  useEffect(() => {
+    if (modalContext.showModal && contact) {
+      setValue('firstName', contact.firstName);
+      setValue('lastName', contact.lastName);
+      setValue('emailAddress', contact.emailAddress);
+      contact.phoneNumbers.map((phone) => {
+        return append(phone);
+      });
+    }
+  }, [contact, modalContext.showModal]);
+
   const onValid = (data) => {
     setFormDisabled(true);
-    createContact(data).then(
-      (response) => {
-        modalContext.closeModal();
-        reset();
-        setFormDisabled(false);
-      },
-      (errors) => {
-        setFormDisabled(false);
-      }
-    );
-  };
+
+    if (contact) {
+      data.id = contact.id;
+      updateContact(data)
+        .then(() => {
+          modalContext.closeModal();
+          reset();
+          setContact();
+          setFormDisabled(false);
+        })
+        .catch((err) => {
+        window.alert(err)
+        });
+    } else {
+      createContact(data).then(
+        () => {
+          modalContext.closeModal();
+          reset();
+          setFormDisabled(false);
+        })
+        .catch(err => {
+          setFormDisabled(err)
+          window.alert(err)
+      })
+       }
+    }
+  
 
   const onClose = () => {
     modalContext.closeModal();
@@ -41,60 +69,84 @@ const ContactModal = () => {
   };
 
   const getPhoneNumberError = (index) => {
-    if (errors.phoneNumbers && errors.phoneNumbers[index] && errors.phoneNumbers[index].phoneNumber) {
+    if (
+      errors.phoneNumbers &&
+      errors.phoneNumbers[index] &&
+      errors.phoneNumbers[index].phoneNumber
+    ) {
       return errors.phoneNumbers[index].phoneNumber;
     }
   };
 
   const getPhoneTypeError = (index) => {
-    if (errors.phoneNumbers && errors.phoneNumbers[index] && errors.phoneNumbers[index].phoneType) {
+    if (
+      errors.phoneNumbers &&
+      errors.phoneNumbers[index] &&
+      errors.phoneNumbers[index].phoneType
+    ) {
       return errors.phoneNumbers[index].phoneType;
     }
   };
 
   return (
     <div className={`modal ${modalContext.showModal ? 'is-active' : ''}`}>
-      <div className="modal-background"></div>
-      <div className="modal-content">
-        <form className="box contact-form" onSubmit={handleSubmit(onValid)}>
-          <div className="field">
-            <label className="label">
-              First Name<span className="required">*</span>
-              <span className="error">{errors.firstName?.type === 'required' && 'Required'}</span>
+      <div className='modal-background'></div>
+      <div className='modal-content'>
+        <form className='box contact-form' onSubmit={handleSubmit(onValid)}>
+          <div 
+              style={{display: 'flex', justifyContent: 'space-between', padding: '10px 0px'}} 
+              class="modal-header" id="modal-header">
+            <h2 class="modal-title" id="modal-title">
+              Add Contact
+            </h2>
+            <button type="button" className="button close-modal" class="close" onClick={onClose} data-dismiss="modal">
+              ×
+            </button>
+          </div>
+          <div className='field'>
+            <label className='label'>
+              First Name<span className='required'>*</span>
+              <span className='error'>
+                {errors.firstName?.type === 'required' && 'Required'}
+              </span>
             </label>
-            <div className="control">
+            <div className='control'>
               <input
                 {...register('firstName', { required: true })}
                 className={`input ${errors.firstName ? 'error' : ''}`}
-                type="text"
+                type='text'
                 disabled={formDisabled}
               />
             </div>
           </div>
-          <div className="field">
-            <label className="label">
-              Last Name<span className="required">*</span>
-              <span className="error">{errors.lastName?.type === 'required' && 'Required'}</span>
+          <div className='field'>
+            <label className='label'>
+              Last Name<span className='required'>*</span>
+              <span className='error'>
+                {errors.lastName?.type === 'required' && 'Required'}
+              </span>
             </label>
-            <div className="control">
+            <div className='control'>
               <input
                 {...register('lastName', { required: true })}
                 className={`input ${errors.lastName ? 'error' : ''}`}
-                type="text"
+                type='text'
                 disabled={formDisabled}
               />
             </div>
           </div>
-          <div className="field">
-            <label className="label">
+          <div className='field'>
+            <label className='label'>
               Email Address
-              <span className="error">{errors.emailAddress?.type === 'pattern' && 'Invalid email'}</span>
+              <span className='error'>
+                {errors.emailAddress?.type === 'pattern' && 'Invalid email'}
+              </span>
             </label>
-            <div className="control">
+            <div className='control'>
               <input
                 {...register('emailAddress', { pattern: /^\S+@\S+\.\S+$/i })}
                 className={`input ${errors.emailAddress ? 'error' : ''}`}
-                type="text"
+                type='text'
                 disabled={formDisabled}
               />
             </div>
@@ -102,62 +154,98 @@ const ContactModal = () => {
           <br />
           <div>
             {fields.map((item, index) => (
-              <div key={`phone-number-${index}`} className="field-row">
-                <div className="field phone-number">
-                  <label className="label">
-                    Phone Number<span className="required">*</span>
-                    <span className="error">{getPhoneNumberError(index)?.type === 'required' && 'Required'}</span>
+              <div key={`phone-number-${index}`} className='field-row'>
+                <div className='field phone-number'>
+                  <label className='label'>
+                    Phone Number<span className='required'>*</span>
+                    <span className='error'>
+                      {getPhoneNumberError(index)?.type === 'required' &&
+                        'Required'}
+                    </span>
                   </label>
-                  <div className="control">
+                  <div className='control'>
                     <input
-                      {...register(`phoneNumbers.${index}.phoneNumber`, { required: true })}
-                      className={`input ${getPhoneNumberError(index) ? 'error' : ''}`}
-                      type="text"
+                      {...register(`phoneNumbers.${index}.phoneNumber`, {
+                        required: true,
+                      })}
+                      className={`input ${
+                        getPhoneNumberError(index) ? 'error' : ''
+                      }`}
+                      type='text'
                       disabled={formDisabled}
-                      placeholder="Enter phone number (required)"
+                      placeholder='Enter phone number (required)'
                     />
                   </div>
                 </div>
-                <div className="field phone-type">
-                  <label className="label">
-                    Phone Type<span className="required">*</span>
-                    <span className="error">{getPhoneTypeError(index)?.type === 'required' && 'Required'}</span>
+                <div className='field phone-type'>
+                  <label className='label'>
+                    Phone Type<span className='required'>*</span>
+                    <span className='error'>
+                      {getPhoneTypeError(index)?.type === 'required' &&
+                        'Required'}
+                    </span>
                   </label>
-                  <div className="control select">
+                  <div className='control select'>
                     <select
-                      {...register(`phoneNumbers.${index}.phoneType`, { required: true })}
+                      {...register(`phoneNumbers.${index}.phoneType`, {
+                        required: true,
+                      })}
                       className={`${getPhoneTypeError(index) ? 'error' : ''}`}
-                      placeholder="Enter phone type (required)"
+                      placeholder='Enter phone type (required)'
                     >
-                      <option value="">Enter Phone Type (required)</option>
-                      <option value="Home">Home</option>
-                      <option value="Work">Work</option>
-                      <option value="Mobile">Mobile</option>
+                      <option value=''>Enter Phone Type (required)</option>
+                      <option value='Home'>Home</option>
+                      <option value='Work'>Work</option>
+                      <option value='Mobile'>Mobile</option>
                     </select>
                   </div>
                 </div>
-                <div className="field phone-remove">
-                  <button type="button" className="button is-danger" onClick={() => remove(index)}>
+                <div className='field phone-remove'>
+                  <button
+                    type='button'
+                    className='button is-danger'
+                    onClick={() => remove(index)}
+                  >
                     Remove
                   </button>
                 </div>
               </div>
             ))}
             <div>
-              <button type="button" className="button is-primary" onClick={() => append({})}>
+              <button
+                type='button'
+                className='button is-primary'
+                onClick={() => append({})}
+              >
                 Add Phone Number
               </button>
             </div>
           </div>
           <br />
-          <div className="buttons is-centered">
-            <button type="submit" className="button is-primary" disabled={formDisabled}>
+          <div className='buttons is-centered'>
+            <button
+              type='submit'
+              className='button is-primary'
+              disabled={formDisabled}
+            >
               Submit
+            </button>
+            <button
+              type='button'
+              className='button is-primary'
+              disabled={formDisabled}
+              onClick={() => onClose()}
+            >
+              Cancel
             </button>
           </div>
         </form>
       </div>
-      <button className="modal-close is-large" aria-label="close" onClick={onClose}></button>
+      <button
+        className='modal-close is-large'
+        aria-label='close'
+        onClick={onClose}
+      ></button>
     </div>
   );
 };
