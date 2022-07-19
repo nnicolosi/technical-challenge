@@ -16,15 +16,15 @@ const Navigation = () => {
 
     items.push(
       <NavLink
-        key='call-list'
+        key='list-call'
         className='navbar-item'
-        to='/call-list'
+        to='/list-call'
         activeClassName='active'
       >
-        Call List
+        List Call
       </NavLink>
     );
-    
+
     return items;
   };
 
