@@ -18,10 +18,10 @@ const DeleteContactModal = () => {
   };
 
   const onDelete = () => {
-    deleteContact({data: modalContext.rowToDelete}).then(
+    deleteContact(modalContext.rowToDelete.id).then(
       (response) => onClose(),
       (errors) => {
-        console.log(errors);
+        console.info(errors);
     })
   };
 

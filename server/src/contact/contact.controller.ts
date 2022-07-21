@@ -44,8 +44,11 @@ export class ContactController {
     return this.contactMapper.mapEntityToDto(response);
   }
 
-  @Put()
-  async editContact(@Body() contactUpdateDto: ContactUpdateDto) {
+  @Put(':id')
+  async updateContact(
+    @Param('id') id: number,
+    @Body() contactUpdateDto: ContactUpdateDto,
+  ) {
     const contact = await this.contactMapper.mapUpdateContactDtoToEntity(
       contactUpdateDto,
     );
@@ -53,12 +56,13 @@ export class ContactController {
     return this.contactMapper.mapEntityToDto(response);
   }
 
-  @Delete()
-  async deleteContact(@Body() contactUpdateDto: ContactUpdateDto) {
-    const contact = await this.contactMapper.mapUpdateContactDtoToEntity(
-      contactUpdateDto,
+  @Delete(':id')
+  async deleteContact(@Param('id') id: number) {
+    const response = await this.contactService.remove(id);
+    console.info({ response });
+    const contacts = await this.contactService.findAll();
+    return contacts.map((contact) =>
+      this.contactMapper.mapEntityToDto(contact),
     );
-    const response = await this.contactService.remove(contact);
-    return this.contactMapper.mapEntityToDto(response);
   }
 }

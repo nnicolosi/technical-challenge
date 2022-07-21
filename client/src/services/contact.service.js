@@ -9,7 +9,7 @@ export const createContact = (contact) => {
 };
 
 export const updateContact = (contact) => {
-  axios.put(`http://localhost:3001/contact/${contact.id}`, contact)
+  return axios.put(`http://localhost:3001/contact/${contact.id}`, contact)
 }
 
 export const deleteContact = (id) => {
