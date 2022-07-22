@@ -7,7 +7,10 @@ import {
 } from 'class-validator';
 import { PhoneCreateDto } from '../../phone/dtos/phone-create.dto';
 
-export class ContactCreateDto {
+export class ContactUpdateDto {
+  @IsNotEmpty()
+  id: number;
+
   @IsNotEmpty()
   firstName: string;
 

@@ -32,4 +32,8 @@ We'll look forward to reviewing your submission.
 
 # Candidate Section
 
-Your content here...
+- We create new functionalities like modal of delete a contact, with features like connection con DB(database) and buttons or icons for close modal of create
+- We create the operations like update and delete(axios) for test functionalities
+- We modify the logic for read a contact, and update the same.
+- I pass the information to modals when I want to update a contact
+- I add the option to have a list call for each contact 
